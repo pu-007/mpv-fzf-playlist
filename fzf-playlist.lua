@@ -5,11 +5,20 @@ local search_key = ";"
 local terminal = "st"
 ---------- end ---------------
 
+local function get_name(play_index)
+    local name_title = mp.get_property("playlist/" .. play_index .. "/title")
+    if name_title ~= nil then
+        return name_title
+    else
+        return mp.get_property("playlist/" .. play_index .. "/filename")
+    end
+end
+
 local function export_playlist()
 	local playlist = io.open(playlist_path, "w")
 	for play_index = 0, mp.get_property_number("playlist-count", 0) - 1 do
 		playlist:write(string.format(
-            "%d|%s\n", play_index, mp.get_property("playlist/" .. play_index .. "/title")
+            "%d|%s\n", play_index, get_name(play_index)
         ))
 	end
 	playlist:close()
